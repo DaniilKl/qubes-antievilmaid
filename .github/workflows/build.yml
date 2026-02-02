@@ -8,6 +8,7 @@ on:
 
 jobs:
   antievilmaid:
-    uses: TrenchBoot/.github/.github/workflows/qubes-dom0-packagev2.yml@master
+    uses: TrenchBoot/.github/.github/workflows/qubes-dom0-packagev2.yml@build-for-remote-signing
     with:
       qubes-component: 'antievilmaid'
+    secrets: inherit

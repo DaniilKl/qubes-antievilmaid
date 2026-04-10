@@ -1,0 +1,39 @@
+name: Rebase on top of QubesOS main and build RPMs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 6'
+
+jobs:
+  try-rebase:
+    uses: TrenchBoot/.github/.github/workflows/rebase.yml@add-rebase-script
+    secrets:
+      first-remote-token: ${{secrets.TOKEN}}
+    permissions:
+      # For creation/deletion/pushing to branches and creating PRs
+      contents: write
+    with:
+      downstream-repo: 'https://github.com/TrenchBoot/qubes-antievilmaid.git'
+      downstream-branch: 'main'
+      upstream-repo: 'https://github.com/QubesOS/qubes-antievilmaid.git'
+      upstream-branch: 'main'
+      commit-user-name: 'github-actions[bot]'
+      commit-user-email: 'github-actions[bot]@users.noreply.github.com'
+      cicd-trigger-resume: '7. Rerun the workflow https://github.com/TrenchBoot/qubes-antievilmaid/actions/runs/${{ github.run_id }} to resume automated rebase.'
+  antievilmaid:
+    needs: try-rebase
+    uses: TrenchBoot/.github/.github/workflows/qubes-dom0-packagev2.yml@master
+    with:
+      qubes-component: 'antievilmaid'
+  trigger-gitea-cicd:
+    needs: antievilmaid
+    uses: TrenchBoot/.github/.github/workflows/trigger-gitea-workflow.yml@add-rebase-script
+    secrets:
+      gitea-token: ${{ secrets.GITEA_TOKEN }}
+    with:
+      api-url:  'https://git.3mdeb.com'
+      owner:    'zarhus'
+      repo:     'trenchboot-release-cicd-pipeline'
+      workflow: 'sign-and-publish-test-rpms.yml'
+      ref:      'master'

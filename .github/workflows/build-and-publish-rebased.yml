@@ -1,0 +1,23 @@
+name: Build the last successful automatic rebase of main branch
+
+on:
+  create:
+    - branches:
+      - 'main-rebased'
+
+jobs:
+  antievilmaid:
+    uses: TrenchBoot/.github/.github/workflows/qubes-dom0-packagev2.yml@master
+    with:
+      qubes-component: 'antievilmaid'
+  trigger-gitea-cicd:
+    needs: antievilmaid
+    uses: TrenchBoot/.github/.github/workflows/trigger-gitea-workflow.yml@add-rebase-script
+    secrets:
+      gitea-token: ${{ secrets.GITEA_TOKEN }}
+    with:
+      api-url:  'https://git.3mdeb.com'
+      owner:    'zarhus'
+      repo:     'trenchboot-release-cicd-pipeline'
+      workflow: 'sign-and-publish-test-rpms.yml'
+      ref:      'master'

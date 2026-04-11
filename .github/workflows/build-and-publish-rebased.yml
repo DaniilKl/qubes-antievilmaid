@@ -21,3 +21,8 @@ jobs:
       repo:     'trenchboot-release-cicd-pipeline'
       workflow: 'sign-and-publish-test-rpms.yml'
       ref:      'master'
+      inputs: >-
+        --input github-repo=qubes-antievilmaid
+        --input github-sha=${{ github.sha }}
+        --input github-run-id=${{ github.run_id }}
+        --input qubes-component=antievilmaid

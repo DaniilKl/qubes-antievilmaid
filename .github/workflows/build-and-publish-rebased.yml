@@ -4,6 +4,9 @@ on:
   create:
     - branches:
       - 'main-rebased'
+  push:
+    - branches:
+      - 'main-rebased'
 
 jobs:
   antievilmaid:

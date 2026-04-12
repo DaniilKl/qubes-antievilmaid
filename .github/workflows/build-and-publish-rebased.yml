@@ -20,7 +20,7 @@ jobs:
       owner:    'zarhus'
       repo:     'trenchboot-release-cicd-pipeline'
       workflow: 'sign-and-publish-test-rpms.yml'
-      ref:      'master'
+      ref:      'add-signing-test-rpms-cicd'
       inputs: >-
         --input github-repo=qubes-antievilmaid
         --input github-sha=${{ github.sha }}

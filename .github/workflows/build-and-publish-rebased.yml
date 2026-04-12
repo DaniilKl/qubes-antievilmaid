@@ -2,7 +2,7 @@ name: Build the last successful automatic rebase of main branch
 
 on:
   create:
-    - branches:
+    branches:
       - 'main-rebased'
 
 jobs:

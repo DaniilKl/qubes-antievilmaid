@@ -2,7 +2,7 @@ name: Build the last successful automatic rebase of main branch
 
 on:
   create:
-    - branches:
+    branches:
       - 'main-rebased'
 
 jobs:
@@ -12,17 +12,16 @@ jobs:
       qubes-component: 'antievilmaid'
   trigger-gitea-cicd:
     needs: antievilmaid
-    uses: TrenchBoot/.github/.github/workflows/trigger-gitea-workflow.yml@add-rebase-script
+    uses: TrenchBoot/.github/.github/workflows/trigger-woodpecker-pipeline.yml@add-rebase-script
     secrets:
-      gitea-token: ${{ secrets.GITEA_TOKEN }}
+      woodpecker-token: ${{ secrets.WOODPECKER_TOKEN }}
     with:
-      api-url:  'https://git.3mdeb.com'
+      api-url:  'https://ci.3mdeb.com'
       owner:    'zarhus'
       repo:     'trenchboot-release-cicd-pipeline'
-      workflow: 'sign-and-publish-test-rpms.yml'
-      ref:      'add-signing-test-rpms-cicd'
+      ref:      'sign-and-publish-rc-rpms'
       inputs: >-
-        --input github-repo=qubes-antievilmaid
-        --input github-sha=${{ github.sha }}
-        --input github-run-id=${{ github.run_id }}
-        --input qubes-component=antievilmaid
+        --input GITHUB_REPO=qubes-antievilmaid
+        --input GITHUB_SHA=${{ github.sha }}
+        --input GITHUB_RUN_ID=${{ github.run_id }}
+        --input QUBES_COMPONENT=antievilmaid
